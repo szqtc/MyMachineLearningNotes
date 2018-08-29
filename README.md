@@ -13,17 +13,23 @@
         + 对率(Logistic)回归
         + Softmax回归 (TODO: example)
     - 线性判别式分析
-2. 支持向量机(SVM)
-    - 硬间隔、软间隔SVC
-        + 求解SVC：SMO算法
-    - 核技巧(TODO)
+2. 支持向量机
+    - 线性SVC
+        + SMO算法
+    - SVC中的核技巧
     - SVR(TODO)
 3. 决策树(TODO)
-    - 决策树算法
+    - 决策树
+        + ID3
+        + C4.5
+        + CART
+    - Bagging
+        + 随机森林
     - 提升方法
         + 提升树
 4. 神经网络与深度学习(TODO)
-    - `tensorflow`基础
+    - `tensorflow`基础与`keras`包
+    - 感知机
     - 前馈神经网络
     - 卷积神经网络
     - 递归神经网络
