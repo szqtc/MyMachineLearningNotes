@@ -7,8 +7,9 @@
 ----------------
 1. [线性回归](1_LinearRegression.ipynb)
     - 线性模型
-        + 正则化
         + 线性基函数
+        + 正则化
+        + 局部加权线性回归
         + 核技巧 (TODO: example)
     - 广义线性模型
         + Logistic回归
