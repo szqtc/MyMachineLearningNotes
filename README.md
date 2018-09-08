@@ -18,10 +18,10 @@
         + Softmax回归 [TODO]
     - 线性判别式分析(LDA)
 2. [支持向量机](2_SVM.ipynb)
-    - 线性SVC
-        + SMO算法
-    - SVC中的核技巧
-    - SVR [TODO]
+    - 线性支持向量分类器(SVC)
+        + 求解SVC(SMO算法)
+    - 核SVC
+    - 支持向量回归(SVR) [TODO]
 3. [决策树](3_Trees.ipynb)
     - 决策树
         + 决策树的学习(ID3, C4.5)
