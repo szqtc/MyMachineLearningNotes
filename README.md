@@ -14,16 +14,17 @@
         + 核技巧
             * 核岭回归(KRR) [TODO]
     - 广义线性模型(GLMs)
-        + Logistic回归
+        + Logistic回归(LR)
         + Softmax回归 [TODO]
     - 线性判别式分析(LDA)
+        + 核线性判别式分析(KLDA) [TODO]
 2. [支持向量机](2_SVM.ipynb)
     - 线性支持向量分类器(SVC)
         + 求解SVC(SMO算法)
     - 核SVC
     - 支持向量回归(SVR) [TODO]
 3. [决策树](3_Trees.ipynb)
-    - 决策树
+    - 决策树(DT)
         + 决策树的学习(ID3, C4.5)
             * 树的生成
             * 特征选择
@@ -31,9 +32,11 @@
             * 其他的技术细节(连续值和缺失值的处理)
         + CART算法：分类决策树和回归树
     - 集成方法 [TODO]
-        + Bagging
-            * 随机森林
-        + 提升方法
+        + 平均方法(Averaging method)
+            * Bagging
+            * 随机森林(RF)
+        + 提升方法(Boosting method)
+            * AdaBoost
             * 提升树
 4. 神经网络与深度学习 [TODO]
     - `tensorflow`基础与`keras`包
