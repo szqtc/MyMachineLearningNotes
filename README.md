@@ -16,7 +16,9 @@
     - 广义线性模型(GLMs)
         + Logistic回归(LR)
         + Softmax回归 [TODO]
-    - 线性判别式分析(LDA)
+    - 判别式分析
+        + 线性判别式分析(LDA)
+        + 二次判别式分析(QDA)
         + 核线性判别式分析(KLDA) [TODO]
 2. [支持向量机](2_SVM.ipynb)
     - 线性支持向量分类器(SVC)
@@ -31,11 +33,11 @@
             * 树的修剪
             * 其他的技术细节(连续值和缺失值的处理)
         + CART算法：分类决策树和回归树
-    - 集成方法 [TODO]
-        + 平均方法(Averaging method)
+    - 集成方法
+        + 平均方法
             * Bagging
-            * 随机森林(RF)
-        + 提升方法(Boosting method)
+            * 随机森林(RF) [TODO]
+        + 提升方法 [TODO]
             * AdaBoost
             * 提升树
 4. 神经网络与深度学习 [TODO]
@@ -54,4 +56,6 @@
 1. 西瓜书
 2. 机器学习实战
 3. 统计学习方法
-4. DeepLearning.ai
+4. An Introduction to Statistical Learning
+5. [scikit-learn.org](http://scikit-learn.org)
+6. [deeplearning.ai](https://www.deeplearning.ai)
