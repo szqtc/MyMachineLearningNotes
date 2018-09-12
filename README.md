@@ -56,6 +56,6 @@
 1. 机器学习, 周志华, 2016.
 2. 机器学习实战, P. Harrington, 2013.
 3. 统计学习方法, 李航, 2012.
-4. An Introduction to Statistical Learning, G. James, D. Witten, T. Hastie and R. Tibshirani, 2013.
+4. An Introduction to Statistical Learning (ISL), G. James, D. Witten, T. Hastie and R. Tibshirani, 2013.
 5. [scikit-learn.org](http://scikit-learn.org)
 6. [deeplearning.ai](https://www.deeplearning.ai)
