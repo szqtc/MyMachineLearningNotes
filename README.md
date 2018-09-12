@@ -1,7 +1,7 @@
 机器学习笔记本
 ============
 介绍一些常见的机器学习算法、简单的Python 3实现，以及它们在已有的工具包中的使用方法。  
-我非计算机专业，初学机器学习，水平尚浅，内容仅供参考。
+*我非计算机专业，初学机器学习，水平尚浅，内容仅供参考*。
 
 目录（暂定）
 ----------------
@@ -41,7 +41,7 @@
             * AdaBoost
             * 提升树
 4. 神经网络与深度学习 [TODO]
-    - `tensorflow`基础与`keras`包
+    - `tensorflow`基础
     - 感知机
     - 前馈神经网络
     - 卷积神经网络
@@ -51,11 +51,11 @@
     - 降维
     
 
-参考资料
-------------
-1. 西瓜书
-2. 机器学习实战
-3. 统计学习方法
-4. An Introduction to Statistical Learning
+主要参考资料
+------------------
+1. 机器学习, 周志华, 2016.
+2. 机器学习实战, P. Harrington, 2013.
+3. 统计学习方法, 李航, 2012.
+4. An Introduction to Statistical Learning, G. James, D. Witten, T. Hastie and R. Tibshirani, 2013.
 5. [scikit-learn.org](http://scikit-learn.org)
 6. [deeplearning.ai](https://www.deeplearning.ai)
