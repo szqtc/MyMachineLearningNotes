@@ -15,7 +15,7 @@
             * 核岭回归(KRR) [TODO]
     - 广义线性模型(GLMs)
         + Logistic回归(LR)
-        + Softmax回归 [TODO]
+        + Softmax回归
     - 判别式分析
         + 线性判别式分析(LDA)
         + 二次判别式分析(QDA)
