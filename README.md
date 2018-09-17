@@ -12,7 +12,7 @@
         + 正则化(岭回归, LASSO)
         + 局部加权线性回归(LWR)
         + 核技巧
-            * 核岭回归(KRR) [TODO]
+            * 核岭回归(KRR)
     - 广义线性模型(GLMs)
         + Logistic回归(LR)
         + Softmax回归
