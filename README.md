@@ -36,7 +36,7 @@
     - 集成方法
         + 平均方法
             * Bagging
-            * 随机森林(RF) [TODO]
+            * 随机森林(RF)
         + 提升方法 [TODO]
             * AdaBoost
             * 提升树
