@@ -233,7 +233,7 @@ class decision_tree:
         filter_[best_index] = False
         return best_index, best_score, best_xsplit, best_Xs_new, best_ys_new
     
-    def _generate_tree(self, X, y, filter_, depth=1):
+    def _generate_tree(self, X, y, filter_, depth=0):
         """
         The main structure of generate a decision tree:
         1. if same type labels of features, set to be a leaf node
@@ -684,7 +684,7 @@ class cart_regressor(cart_classifier):
         """
         super().__init__(scorefunc=scorefunc, maxdepth=maxdepth, seed=seed)
         
-    def _generate_tree(self, X, y, filter_, depth=1):
+    def _generate_tree(self, X, y, filter_, depth=0):
         """
         The main structure of generate a decision tree:
         1. if same type labels of features, set to be a leaf node
