@@ -36,15 +36,16 @@
     - 集成方法
         + 平均方法
             * Bagging
-            * 随机森林(RF)
-        + 提升方法 [TODO]
+            * 随机森林(RF) [TO BE CORRECTED]
+        + 提升方法
             * AdaBoost
-            * 提升树
+            * 回归问题中的提升方法
+            * 梯度提升树(GBDT) [TODO]
 4. 贝叶斯模型与概率图模型 [TODO]
     - 朴素贝叶斯分类器
     - 贝叶斯网
     - 隐Markov模型
-    - 条件随机场
+    - 条件随机场(CRF)
 5. 神经网络与深度学习 [TODO]
     - `tensorflow`基础
     - 感知机
