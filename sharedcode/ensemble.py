@@ -1,4 +1,34 @@
 import numpy as np
+import tree
+
+def bootstrap(X, y, size, random_state=None):
+    """
+    Bootrap sampling of the data
+    
+    Parameters
+    -------------
+    X : numpy array, (m, n)
+        input feature vectors
+    y : numpy array, (m, 1)
+        input labels
+    size : integer, >0
+        the size of the resampled data
+    random_state : np.random.RandomState object or None
+        
+    Returns
+    ---------
+    X_res : numpy array, (size, n)
+        resampled feature vectors
+    y_res : numpy array, (size, 1)
+        resampled labels
+    index : numpy array, (size, )
+        the index of the resampled data
+    """
+    if random_state is None:
+        new_idx = np.random.choice(X.shape[0], size=size)
+    else:
+        new_idx = random_state.choice(X.shape[0], size=size)
+    return X[new_idx, :], y[new_idx], new_idx
 
 class bagging:
     """
@@ -174,9 +204,9 @@ class bagging:
 
 
 class random_forest(bagging):
-    "Random forest"
+    "random forest"
     
-    def __init__(self, estimator, n_estimators=10, max_features=None, oob_score=True, seed=None, **kwds):
+    def __init__(self, estimator=tree.random_cart_classifier, n_estimators=10, max_features=None, oob_score=True, seed=None, **kwds):
         """
         Parameters
         -------------
@@ -184,47 +214,83 @@ class random_forest(bagging):
             
         n_estimator : integer, >0
             the number of decision tree
-        max_features : positive integer, or None
-            for None, max_feature=sqrt(n_features)
         seed : integer, or None
             the random seed
+        max_features : positive integer, or None
+            for None, max_feature=sqrt(n_features)
         oob_score : bool
             whether to calculate the out-of-bag
             score
         **kwds :
             the parameters passing to the estimator
         """
-        self.max_features = max_features
-        self.features_ = None
-        
-        super().__init__(estimator, n_estimators=n_estimators, oob_score=oob_score, seed=seed, **kwds)
-        
-    def _fit_one(self, X, y, estimator):
+        super().__init__(estimator, n_estimators=n_estimators, max_features=max_features, oob_score=oob_score, seed=seed, **kwds)
+    
+
+class adaboost_classifier:
+    "AdaBoost based on the resampling method"
+    
+    def __init__(self, estimator, n_estimators=10, seed=None, **kwds):
         """
         Parameters
         -------------
-        X : numpy array, (m, n)
-            input feature vectors
-        y : numpy array, (m, 1)
-            input labels
         estimator : object
-            estimate object
-            
-        Returns
-        ---------
-        oob_index : numpy array, or None
-        oob_pred : numpy array, or None
+        n_estimator : integer, >0
+            the number of decision tree
+        seed : integer, or None
+            the random seed, it will be used to initiate
+            estimators of random algorithms (e.g. decision
+            tree) and do resampling
+        **kwds :
+            the parameters passing to the estimator
         """
-        # select feature
-        feat = list(range(X.shape[1]))
-        self.random_state.shuffle(feat)
-        feat = feat[:self.max_features]
-        self.features_.append(feat)
+        self.n_estimators = n_estimators
+        self.random_state = np.random.RandomState(seed)
         
-        # shuffle the data and fit
-        return super()._fit_one(X[:, feat], y, estimator)
+        if 'seed' in kwds:
+            del kwds[seed]
         
-    def fit(self, X, y):
+        self.estimators = []
+        for i in range(self.n_estimators):
+            varnames = estimator.__init__.__code__.co_varnames
+            if varnames is not None and 'seed' in varnames:
+                est = estimator(seed=self.random_state.randint(1000000000), **kwds)
+            else:
+                est = estimator(**kwds)
+            self.estimators.append(est)
+            
+        self.alphas_, self.weights_ = None, None
+        self.classes_mean_ = 0.
+
+    def resample(self, weight, size):
+        """
+        Parameters
+        ----------
+        weight : numpy array, (m, 1)
+            the distribution of each item in the
+            training data
+        size : positive integer
+            the size of resampled data set
+        """
+        cum = np.cumsum(weight)
+        #print(cum)
+        rands = self.random_state.rand(size)
+        indexes = []
+        for r in rands:
+            # bisect
+            lo, hi = 0, size
+            while lo < hi:
+                mid = (lo+hi)//2
+                midval = cum[mid]
+                if r < midval:
+                    hi = mid
+                else:
+                    lo = mid+1
+            #print(r, lo, hi, cum[lo], cum[hi])
+            indexes.append(lo)
+        return np.array(indexes)
+            
+    def fit(self, X, y, maxiter=10):
         """
         Parameters
         -------------
@@ -232,31 +298,59 @@ class random_forest(bagging):
             input feature vectors
         y : numpy array, (m, 1)
             input labels
+        maxiter : positive integer, default: 10
+            the maximum number of trials for one base
+            estimator
         """
-        if self.max_features is None:
-            n = X.shape[0]
-            if n < 4:
-                self.max_features = 1
+        self.classes_ = np.unique(y) # sorted unique values
+        if len(self.classes_) > 2:
+            raise NotImplementedError('The algorithm can only be used in binary classification')
+        self.classes_mean_ = sum(self.classes_)/len(self.classes_)
+        
+        m = y.shape[0]
+        self.alphas_ = []
+        self.weights_ = np.full((m, 1), fill_value=1./m)
+        for i, est in enumerate(self.estimators):
+            #print(self.weights_.ravel()))
+            for _ in range(maxiter):
+                # fit the model with the resampled data
+                rand_idx = self.resample(self.weights_, m)
+                X_, y_ = X[rand_idx, :], y[rand_idx, :]
+                est.fit(X_, y_)
+                
+                # evaluate the error of all training data
+                y_pred = est.predict(X)
+                good_predict = (y_pred == y)
+                err = 1. - self.weights_[good_predict].sum()
+                if err < 0.5:
+                    break
             else:
-                self.max_features = int(np.log2(n))
-        self.features_ = []
+                raise RuntimeError('number of fitting failures exceeds the limit!')
+
+            if err < 1e-10: # all correct, only use the last one
+                self.alphas_ = [0.]*(i-1) + [1.]
+                break
+            alpha = 0.5*np.log((1.-err)/err)
+            self.alphas_.append(alpha)
+            #print(err, alpha)
             
-        super().fit(X, y)
-        
-    def _predict_one(self, x, i):
+            # use predicted values as if y in {-1, 1}
+            self.weights_ *= np.where(good_predict, np.exp(-alpha), np.exp(alpha))
+            self.weights_ /= self.weights_.sum()
+            
+    def predict(self, X):
         """
-        Predict one input vector with i-th estimator
-        
         Parameters
         -------------
-        x : numpy array, (m, 1)
-            input feature vector
-        i : non-negative integer
-            the index of the estimator
+        X : numpy array, (m', n)
+            input feature vectors
             
         Returns
-        ---------
-        y : object
-            predicted value
+        -------
+        y : numpy array, (m', 1)
+            input labels
         """
-        return self.estimators[i].predict(x[self.features_[i]]).ravel()[0]
+        H = 0.
+        for alpha, est in zip(self.alphas_, self.estimators):
+            H += alpha*np.where(est.predict(X)<=self.classes_mean_, -1., 1.)
+        return np.where(H<=0., self.classes_[0], self.classes_[1]) # self.classes_ are sorted

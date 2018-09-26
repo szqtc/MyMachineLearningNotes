@@ -328,14 +328,13 @@ class decision_tree:
             features of training examples
         y : numpy array, (m, 1)
             labels of training examples
-        filter_ : array of bools (n, ), or None (default)
+        filter_ : array of bools (n, ), or None
             if the corresponding term of feature in filter_ is
             False, the feature will not be splitted
+            *NOTE*: make sure not all False in the array
         """
-        n = X.shape[1]
         if filter_ is None:
-            filter_ = np.array([True]*n, dtype=bool)
-
+            filter_ = np.array([True]*X.shape[1], dtype=bool)
         self.tree_ = self._generate_tree(X, y, filter_=filter_)
 
     def _predict_one(self, x):
@@ -597,12 +596,14 @@ class cart_classifier(decision_tree):
 
         # find the best feature
         best_score = -inf
-        best_index = None
+        best_index, best_xsplit = None, None
         best_Xs_new, best_ys_new = None, None
         #print('score:')
         for i in indices:
             # do not split the feature with all the values the same
-            if (X[:, i] == X[0, i]).all(): continue
+            if (X[:, i] == X[0, i]).all():
+                #print('skip {}'.format(i), X[:, i], X[0, i])
+                continue
 
             xsplit, Xs_new, ys_new, score = find_best_split_point(X, y, attr_axis=i, scorefunc=self.scorefunc_)
             #print('    ', i, score)
@@ -613,10 +614,11 @@ class cart_classifier(decision_tree):
                 best_Xs_new = Xs_new
                 best_ys_new = ys_new
 
+        #print(X, y)
+        assert best_index is not None
         best_xsplit_out = ['<{}'.format(best_xsplit), '>={}'.format(best_xsplit)]
         #print(best_score, best_index, best_xsplit)
         # the best feature can be chosen again in CART
-        assert best_index is not None
         return best_index, best_score, best_xsplit_out, best_Xs_new, best_ys_new
 
     def _predict_one(self, x):
@@ -755,3 +757,66 @@ class cart_regressor(cart_classifier):
             child = self._generate_tree(X_new, y_new, filter_=filter_.copy(), depth=depth+1)
             tree[xsplit] = child
         return tree
+    
+
+class random_cart_classifier(cart_classifier):
+    """
+    CART classifier. When do feature split, random feature will be chosen. Only used in random forest
+    """
+    
+    def __init__(self, scorefunc=neg_gini_index, maxdepth=None, max_features=None, seed=None):
+        """
+        Parameters
+        -------------
+        scorefunc : function, f(y: np.array, ys_new: list) -> float
+            the function used to calculate the score of
+            each feature
+        maxdepth : positive integer, or None (default)
+            the maximum depth of the tree
+        max_features : positive integer, or None
+            for None, max_feature=sqrt(n_features)
+        seed : int or None
+            random seed
+        """
+        super().__init__(scorefunc=scorefunc, maxdepth=maxdepth, seed=seed)
+        self.max_features = max_features
+        
+    def fit(self, X, y):
+        """
+        Parameters
+        -------------
+        X : numpy array, (m, n)
+            input feature vectors
+        y : numpy array, (m, 1)
+            input labels
+        """
+        n = X.shape[1]
+        if self.max_features is None:
+            if n < 4:
+                self.max_features = 1
+            else:
+                self.max_features = int(np.log2(n))
+        filter_ = np.array([True]*self.max_features + [False]*(n-self.max_features))
+        super().fit(X, y, filter_=filter_)
+        
+    def _generate_tree(self, X, y, filter_, depth=0):
+        """
+        Parameters
+        ------------
+        X : numpy array, (m, n)
+            features of training examples
+        y : numpy array, (m, 1)
+            labels of training examples
+        filter_ : array of bools (n, )
+            if the corresponding term of feature in filter_ is
+            False, the feature will not be splitted
+            *NOTE*: make sure not all False in the array
+        depth : integer
+            the depth of the subtree
+            
+        Returns
+        ---------
+        tree : dict
+        """
+        self.random_state.shuffle(filter_) # choose random features
+        return super()._generate_tree(X, y, filter_, depth=depth)

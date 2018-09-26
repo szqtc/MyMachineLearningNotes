@@ -36,7 +36,7 @@
     - 集成方法
         + 平均方法
             * Bagging
-            * 随机森林(RF) [TO BE CORRECTED]
+            * 随机森林(RF)
         + 提升方法
             * AdaBoost
             * 回归问题中的提升方法
