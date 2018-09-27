@@ -357,18 +357,7 @@ class kernelSVC(linearSVC):
         else:
             raise ValueError('The kernel {} is not support now'.format(kernel))
 
-        self.kernel_parameters_ = {}
-        nargs = kernel_func.__code__.co_argcount
-        nargs_default = 0 if kernel_func.__defaults__ is None else len(kernel_func.__defaults__)
-        for i in range(2, kernel_func.__code__.co_argcount):
-            var = kernel_func.__code__.co_varnames[i]
-            if var in kwds:
-                val = kwds[var]
-            elif i >= nargs - nargs_default:
-                val = kernel_func.__defaults__[i-(nargs - nargs_default)]
-            else:
-                raise TypeError('parameter {} is required'.format(var))
-            self.kernel_parameters_[var] = val
+        self.kernel_parameters_ = kwds.copy()
         self.kernel_function_ = lambda x1, x2: kernel_func(x1, x2, **self.kernel_parameters_)
 
     def update_model(self, alpha, X_data, y_data):
