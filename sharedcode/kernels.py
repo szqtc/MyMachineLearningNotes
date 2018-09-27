@@ -1,9 +1,3 @@
-"""
-A collection of kernel functions to play kernel tricks
-
-Author : Zhaoqiang SHEN
-Date : 20180917
-"""
 import numpy as np
 
 def rbf(x1, x2, gamma=1.):

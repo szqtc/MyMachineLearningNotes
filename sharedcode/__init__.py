@@ -16,3 +16,13 @@
 # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
+
+"""
+A collection of quick and dirty implementations of common machine learning
+algorithms, which only aims to show you how the algorithms are built.
+
+Author: Zhaoqiang SHEN
+E-mail: zhaoqiangshen@outlook.com
+Website: github.com/szqtc/MyMachineLearningNotes
+Date: 2018/09/01
+"""

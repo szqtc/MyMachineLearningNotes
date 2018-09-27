@@ -1,6 +1,6 @@
 机器学习笔记本
 ============
-介绍一些常见的机器学习算法、简单的Python 3实现，以及它们在已有的工具包中的使用方法。  
+介绍一些常见的机器学习算法、简单粗糙的Python 3实现，以及它们在已有的工具包中的使用方法。  
 *我非计算机专业，初学机器学习，水平尚浅，内容仅供参考*。
 
 目录（暂定）
@@ -10,9 +10,9 @@
         + 线性回归
         + 线性基函数
         + 正则化(岭回归, LASSO)
-        + 局部加权线性回归(LWR)
         + 核技巧
             * 核岭回归(KRR)
+        + 局部加权线性回归(LWR)
     - 广义线性模型(GLMs)
         + Logistic回归(LR)
         + Softmax回归
@@ -65,3 +65,5 @@
 4. An Introduction to Statistical Learning (ISL), G. James, D. Witten, T. Hastie and R. Tibshirani, 2013.
 5. [scikit-learn.org](http://scikit-learn.org)
 6. [deeplearning.ai](https://www.deeplearning.ai)
+
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by/4.0/">知识共享署名 4.0 国际许可协议</a>进行许可。
